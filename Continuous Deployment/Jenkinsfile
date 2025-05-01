@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent { label 'Slave_A' }  // This locks the CD job to run only on Slave_A
 
     environment {
         IMAGE_NAME = "discoverdevops/micro_service"
@@ -19,7 +19,6 @@ pipeline {
         stage('Stop and Remove Old Container (if running)') {
             steps {
                 script {
-                    // Stop the old container if running (ignore error if not running)
                     sh "docker stop ${CONTAINER_NAME} || true"
                     sh "docker rm ${CONTAINER_NAME} || true"
                 }
@@ -29,9 +28,7 @@ pipeline {
         stage('Run New Container') {
             steps {
                 script {
-                    sh """
-                    docker run -d --name ${CONTAINER_NAME} -p 3000:3000 ${IMAGE_NAME}:latest
-                    """
+                    sh "docker run -d --name ${CONTAINER_NAME} -p 3000:3000 ${IMAGE_NAME}:latest"
                 }
             }
         }
