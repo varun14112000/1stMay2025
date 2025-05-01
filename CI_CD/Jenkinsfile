@@ -1,0 +1,65 @@
+pipeline {
+    agent { label 'Slave_A' }   // Runs ONLY on Slave_A
+
+    environment {
+        IMAGE_NAME = "discoverdevops/micro_service"
+        CONTAINER_NAME = "micro_service_container"
+    }
+
+    stages {
+
+        // 1️ Checkout Code
+        stage('Checkout Code') {
+            steps {
+                git branch: 'main', url: 'https://github.com/discover-devops/1stMay2025.git'
+            }
+        }
+
+        // 2️ Build Docker Image
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    def app = docker.build("${IMAGE_NAME}")
+                }
+            }
+        }
+
+        // 3️ Push Docker Image to Docker Hub
+        stage('Push Docker Image to Docker Hub (without auth)') {
+            steps {
+                script {
+                    sh "docker tag ${IMAGE_NAME} ${IMAGE_NAME}:latest"
+                    sh "docker push ${IMAGE_NAME}:latest"
+                }
+            }
+        }
+
+        // 4️ Pull Latest Image
+        stage('Pull Latest Docker Image') {
+            steps {
+                script {
+                    sh "docker pull ${IMAGE_NAME}:latest"
+                }
+            }
+        }
+
+        // 5️ Stop and Remove Old Container
+        stage('Stop and Remove Old Container (if running)') {
+            steps {
+                script {
+                    sh "docker stop ${CONTAINER_NAME} || true"
+                    sh "docker rm ${CONTAINER_NAME} || true"
+                }
+            }
+        }
+
+        // 6️ Run New Container
+        stage('Run New Container') {
+            steps {
+                script {
+                    sh "docker run -d --name ${CONTAINER_NAME} -p 3000:3000 ${IMAGE_NAME}:latest"
+                }
+            }
+        }
+    }
+}
