@@ -2,6 +2,7 @@ pipeline {
     agent any
 
     environment {
+        // Still keeping this in case we need it later, but not using in push
         DOCKER_HUB_CREDENTIALS = credentials('dockerhub-credentials')
     }
 
@@ -9,7 +10,6 @@ pipeline {
 
         stage('Checkout Code') {
             steps {
-                // Check out the code from GitHub main branch
                 git branch: 'main', url: 'https://github.com/discover-devops/1stMay2025.git'
             }
         }
@@ -17,20 +17,16 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    // Build the Docker image with the same name you'll push later
-                    docker.build("discoverdevops/micro_service")
+                    app = docker.build("discoverdevops/micro_service")
                 }
             }
         }
 
-        stage('Push Docker Image to Docker Hub') {
+        stage('Push Docker Image to Docker Hub (without auth)') {
             steps {
                 script {
-                    docker.withRegistry('https://index.docker.io/v1/', DOCKER_HUB_CREDENTIALS) {
-                        // Push the same image you built earlier
-                        def app = docker.build("discoverdevops/micro_service")
-                        app.push('latest')
-                    }
+                    // Just push the image directly (assuming docker login already done)
+                    app.push('latest')
                 }
             }
         }
