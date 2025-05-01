@@ -16,7 +16,7 @@ pipeline {
             steps {
                 script {
                     // This must match the image name you want to push
-                    docker.build("discoverdevops/myprodapp")
+                    docker.build("discoverdevops/micro_service")
                 }
             }
         }
