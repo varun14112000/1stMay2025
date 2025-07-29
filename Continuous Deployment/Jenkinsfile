@@ -2,7 +2,7 @@ pipeline {
     agent { label 'slave' }  // This locks the CD job to run only on Slave_A
 
     environment {
-        IMAGE_NAME = "varun1411/ci_cd:latest"
+        IMAGE_NAME = "varun1411/ci_cd"
         CONTAINER_NAME = "ci_cd_container"
     }
 
