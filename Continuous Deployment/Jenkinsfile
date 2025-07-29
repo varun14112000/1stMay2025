@@ -1,9 +1,9 @@
 pipeline {
-    agent { label 'Slave_A' }  // This locks the CD job to run only on Slave_A
+    agent { label 'slave' }  // This locks the CD job to run only on Slave_A
 
     environment {
-        IMAGE_NAME = "discoverdevops/micro_service"
-        CONTAINER_NAME = "micro_service_container"
+        IMAGE_NAME = "varun1411/ci_cd:latest"
+        CONTAINER_NAME = "ci_cd_container"
     }
 
     stages {
