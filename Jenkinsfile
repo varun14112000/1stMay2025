@@ -10,14 +10,14 @@ pipeline {
 
         stage('Checkout Code') {
             steps {
-                git branch: 'main', url: 'https://github.com/discover-devops/1stMay2025.git'
+                git branch: 'main', url: 'https://github.com/varun14112000/1stMay2025.git'
             }
         }
 
         stage('Build Docker Image') {
             steps {
                 script {
-                    app = docker.build("discoverdevops/micro_service")
+                    app = docker.build("varun1411/ci_cd")
                 }
             }
         }
