@@ -2,7 +2,7 @@ const http = require('http');
 const port = 3000;
 
 const requestHandler = (req, res) => {
-  res.end('Finally executed CI_CD pipeline!! Hurrayyyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy');
+  res.end('Hello CI_CD Successfull');
 };
 
 const server = http.createServer(requestHandler);
