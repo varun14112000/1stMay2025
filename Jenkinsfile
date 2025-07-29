@@ -1,5 +1,5 @@
 pipeline {
-    agent any
+    agent {label 'slave'}
 
     environment {
         // Still keeping this in case we need it later, but not using in push
